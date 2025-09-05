@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laced-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: laced
+  template:
+    metadata:
+      labels:
+        app: laced
+    spec:
+      containers:
+        - name: laced
+          image: your-registry/laced:latest
+          ports:
+            - containerPort: 8888
+          envFrom:
+            - secretRef:
+                name: laced-secrets
+          volumeMounts:
+            - mountPath: /var/lib/laced/storage
+              name: storage
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: laced-pvc

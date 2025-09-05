@@ -1,0 +1,65 @@
+# controllers/__init__.py
+# Import all FastAPI controllers
+
+from . import (
+    auth_controller,
+    user_controller,
+    prompt_controller,
+    image_controller,
+    video_controller,
+    avatar_controller,
+    lora_controller,
+    editor_controller,
+    feedback_controller,
+    community_controller,
+    room_controller,
+    message_controller,
+    comment_controller,
+    post_controller,
+    collection_controller,
+    search_controller,
+    on_controller,
+    toggle_controller,
+    webhook_controller,
+    report_controller,
+    reaction_controller,
+    subscription_controller,
+    tier_controller,
+    notification_controller,
+    settings_controller,
+    admin_controller,
+    invite_controller,
+    analytics_controller,
+    billing_controller,
+    cache_controller,
+    feature_controller,
+    persona_controller,
+    lounge_controller,
+    enhancement_request_controller,
+    post_metrics_controller,
+    system_flag_controller,
+    lora_upload_log_controller,
+    activity_controller,
+    export_controller,
+    premium_controller,
+    api_key_controller,
+    job_controller,
+)
+
+# Whisper controller
+from .whisper_controller import router as whisper_router
+
+__all__ = [
+    "auth_controller", "user_controller", "prompt_controller", "image_controller",
+    "video_controller", "avatar_controller", "lora_controller", "editor_controller",
+    "feedback_controller", "community_controller", "room_controller", "message_controller",
+    "comment_controller", "post_controller", "collection_controller", "search_controller",
+    "on_controller", "toggle_controller", "webhook_controller", "report_controller",
+    "reaction_controller", "subscription_controller", "tier_controller", "notification_controller",
+    "settings_controller", "admin_controller", "invite_controller", "analytics_controller",
+    "billing_controller", "cache_controller", "feature_controller", "persona_controller",
+    "lounge_controller", "enhancement_request_controller", "post_metrics_controller",
+    "system_flag_controller", "lora_upload_log_controller", "activity_controller",
+    "export_controller", "premium_controller", "api_key_controller", "job_controller",
+    "whisper_router"
+]

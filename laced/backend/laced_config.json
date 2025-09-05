@@ -1,0 +1,58 @@
+{
+  "app_name": "Laced",
+  "version": "1.0.0",
+  "description": "Laced — fully private image generation backend for Whisper & Lace",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8888,
+    "workers": 4
+  },
+  "database": {
+    "engine": "postgresql",
+    "url_template": "postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+  },
+  "redis": {
+    "url_template": "redis://{REDIS_HOST}:{REDIS_PORT}/0"
+  },
+  "storage": {
+    "local_path": "/var/lib/laced/storage",
+    "max_upload_mb": 512,
+    "allowed_image_types": ["png", "jpg", "jpeg", "webp", "gif", "bmp", "tiff"]
+  },
+  "models": {
+    "default_model": "realisticvision-v2",
+    "model_preview_count": 8,
+    "lora_slots": 10,
+    "allow_user_models": true
+  },
+  "features": {
+    "enable_upscale": true,
+    "enable_editor": true,
+    "private_lora_slots": true,
+    "prompt_history": true,
+    "audit_logging": true,
+    "premium_features": true,
+    "community_modules": true,
+    "moderation_tools": true
+  },
+  "security": {
+    "jwt_algorithm": "HS256",
+    "access_token_expires_minutes": 60,
+    "refresh_token_expires_days": 30,
+    "rate_limit_per_minute": 120
+  },
+  "observability": {
+    "sentry_dsn_env": "SENTRY_DSN",
+    "log_level": "INFO"
+  },
+  "cors": {
+    "allowed_origins": [
+      "http://localhost:5173",
+      "https://your-frontend.example.com"
+    ]
+  },
+  "dev": {
+    "seed_admin_email": "admin@example.com",
+    "seed_admin_password_env": "SEED_ADMIN_PASSWORD"
+  }
+}

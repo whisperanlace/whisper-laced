@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laced_backend
+    env_file:
+      - .env
+    ports:
+      - "${SERVER_PORT:-8888}:8888"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - laced_storage:/var/lib/laced/storage
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: laced_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: laced_redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    restart: unless-stopped
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A backend.app.tasks worker --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+    volumes:
+      - laced_storage:/var/lib/laced/storage
+    restart: on-failure
+
+volumes:
+  laced_storage:
+  pgdata:
+  redisdata:
