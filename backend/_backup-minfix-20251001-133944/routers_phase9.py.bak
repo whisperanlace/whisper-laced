@@ -1,0 +1,24 @@
+﻿from fastapi import APIRouter
+from backend.controllers.moderation_controller import router as moderation_router
+from backend.controllers.report_controller import router as report_router
+from backend.controllers.editor_controller import router as editor_router
+try:
+    from backend.controllers.enhancement_request_controller import router as enhancement_router
+except ImportError:
+    from backend.controllers.enhancement_controller import router as enhancement_router
+from backend.controllers.auth_controller import router as auth_router
+from backend.controllers.auth_token_controller import router as auth_token_router
+
+def include_phase9(app):
+    app.include_router(moderation_router)
+    app.include_router(report_router)
+    app.include_router(editor_router)
+    app.include_router(enhancement_router)
+    app.include_router(auth_router)        # /auth/me
+    app.include_router(auth_token_router)  # /auth/token
+
+    probe = APIRouter()
+    @probe.get("/editor/ping")
+    def ping_probe():
+        return {"ok": True, "source": "routers_phase9"}
+    app.include_router(probe)

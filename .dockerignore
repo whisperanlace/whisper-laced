@@ -1,0 +1,16 @@
+﻿__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+.env
+.git
+.gitignore
+.vscode
+.idea
+dist/
+build/
+__dist__/
+node_modules/
+# keep DB out of image layer cache; it will be created at runtime
+backend/db.sqlite3

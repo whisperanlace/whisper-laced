@@ -1,0 +1,10 @@
+def get_cors_config():
+    """
+    Centralized CORS configuration.
+    """
+    return {
+        "allow_origins": ["*"],  # TODO: tighten in production
+        "allow_credentials": True,
+        "allow_methods": ["*"],
+        "allow_headers": ["*"],
+    }

@@ -1,0 +1,11 @@
+0000000000000000000000000000000000000000 84e8eda1c3c4f70937b38510e6ae42fbcbcc51da whisperandlace <whisperandlace@gmail.com> 1759148358 -0400	commit (initial): Init clean repo (ignore venv), normalize line endings
+84e8eda1c3c4f70937b38510e6ae42fbcbcc51da 34a3a05b494590ab6e572a72889ca4b09758a9a8 whisperandlace <whisperandlace@gmail.com> 1759167401 -0400	commit: Phase 9: moderation & reports wired with unified JWT admin auth
+34a3a05b494590ab6e572a72889ca4b09758a9a8 2c2a50ae1aeef7ff5ea27ee104559229db4be8f5 whisperandlace <whisperandlace@gmail.com> 1759238292 -0400	commit: Phase 10: editor + enhancements fixed; reports stable; routers wired
+2c2a50ae1aeef7ff5ea27ee104559229db4be8f5 6873e50f76004572cf68e2605a5ecb5bcb8ca714 whisperandlace <whisperandlace@gmail.com> 1759238490 -0400	commit: Phase 10: editor + enhancements + reports stabilized, smoke script added
+6873e50f76004572cf68e2605a5ecb5bcb8ca714 4fd2f1f546f2bceef0b22b678865fe9396f93bbe whisperandlace <whisperandlace@gmail.com> 1759240335 -0400	commit: Phase 10 stable: editor+enhancements+reports OK; smoke script passing
+4fd2f1f546f2bceef0b22b678865fe9396f93bbe 7de0bc8c76498074f209f52d4cacf6a3802a9772 whisperandlace <whisperandlace@gmail.com> 1759410532 -0400	commit: chore: initial push
+7de0bc8c76498074f209f52d4cacf6a3802a9772 7de0bc8c76498074f209f52d4cacf6a3802a9772 whisperandlace <whisperandlace@gmail.com> 1759410537 -0400	Branch: renamed refs/heads/master to refs/heads/main
+7de0bc8c76498074f209f52d4cacf6a3802a9772 690b2cc085f2eae1051661db689c8cd6378640c2 whisperandlace <whisperandlace@gmail.com> 1759423720 -0400	commit: backend: prod_main + migrations stable; seed+login verified
+690b2cc085f2eae1051661db689c8cd6378640c2 cec5963dc17ddcb8aa71787680bb7c3427fd087a whisperandlace <whisperandlace@gmail.com> 1759536537 -0400	commit: Migrations fixed: init_all_models at 35942731785d + model cleanups
+cec5963dc17ddcb8aa71787680bb7c3427fd087a cec5963dc17ddcb8aa71787680bb7c3427fd087a whisperandlace <whisperandlace@gmail.com> 1759591228 -0400	Branch: renamed refs/heads/main to refs/heads/main
+cec5963dc17ddcb8aa71787680bb7c3427fd087a 24703e4f5454d8dfe68e8c6f90afabf86ed7b8e2 whisperandlace <whisperandlace@gmail.com> 1759591869 -0400	commit: chore: stage backend cleanup + fixes for CI

@@ -1,0 +1,55 @@
+﻿from __future__ import annotations
+from fastapi import APIRouter
+
+def include_phase9(app):
+    mounted = []
+
+    # --- moderation ---
+    try:
+        from backend.controllers.moderation_controller import router as moderation_router
+        app.include_router(moderation_router)
+        mounted.append("/moderation")
+    except Exception as e:
+        mounted.append(f"!moderation: {e!r}")
+
+    # --- reports ---
+    try:
+        from backend.controllers.report_controller import router as report_router
+        app.include_router(report_router)
+        mounted.append("/reports")
+    except Exception as e:
+        mounted.append(f"!reports: {e!r}")
+
+    # --- editor ---
+    try:
+        from backend.controllers.editor_controller import router as editor_router
+        app.include_router(editor_router)
+        mounted.append("/editor")
+    except Exception as e:
+        mounted.append(f"!editor: {e!r}")
+
+    # --- enhancements ---
+    try:
+        from backend.controllers.enhancement_request_controller import router as enhancement_router
+        app.include_router(enhancement_router)
+        mounted.append("/enhancements")
+    except Exception as e:
+        mounted.append(f"!enhancements: {e!r}")
+
+    # force-regenerate OpenAPI after (re)mounting routers
+    try:
+        app.openapi_schema = None
+    except Exception:
+        pass
+
+    probe = APIRouter()
+    @probe.get("/__phase9_probe")
+    def _probe():
+        try:
+            paths = sorted({getattr(r, "path", None) for r in app.routes if getattr(r, "path", None)})
+        except Exception:
+            paths = []
+        return {"ok": True, "mounted": mounted, "paths": paths}
+    app.include_router(probe)
+
+# touch

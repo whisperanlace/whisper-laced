@@ -1,0 +1,6 @@
+﻿from __future__ import annotations
+def include_phase10(app):
+    from backend.controllers.editor_controller import router as editor_router
+    from backend.controllers.enhancement_request_controller import router as enhancement_router
+    app.include_router(editor_router)
+    app.include_router(enhancement_router)

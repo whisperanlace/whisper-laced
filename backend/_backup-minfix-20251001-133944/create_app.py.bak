@@ -1,0 +1,15 @@
+﻿from fastapi import FastAPI
+from backend.routes import whisper_routes
+
+def create_app():
+    app = FastAPI()
+    app.include_router(whisper_routes.router)
+        from backend.app.routers_phase9 import include_phase9
+    include_phase9(app)
+    return app
+# === Phase 10 router includes (auto) ===
+try:
+    from backend.app.routers_phase10 import include_phase10
+    include_phase10(app)
+except Exception:
+    pass

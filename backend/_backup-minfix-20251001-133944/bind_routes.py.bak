@@ -1,0 +1,93 @@
+﻿from fastapi import FastAPI
+from backend.routes import (
+    # Phase 1 – Core
+    health_routes,
+
+    # Phase 2 – Users & Auth
+    user_routes,
+
+    # Phase 3 – Toggles & System Flags
+    toggle_routes,
+
+    # Phase 4 – Tiers & Monetization
+    premium_routes,
+
+    # Phase 5 – Core Generation (Image, Video, Upload, LoRA, Avatar)
+    lora_routes,
+    avatar_routes,
+    upload_routes,
+    media_routes,
+    video_routes,
+
+    # Phase 6 – Whisper Integration
+    whisper_routes,
+
+    # Phase 7 – History, Metrics, Analytics
+    history_routes,
+    metrics_routes,
+    analytics_routes,
+
+    # Phase 8 – Community & Social
+    community_routes,
+    lounge_routes,
+    post_routes,
+    comment_routes,
+    reaction_routes,
+    invite_routes,
+    motion_routes,
+)
+
+def bind_routes(app: FastAPI) -> None:
+    # Phase 1
+    app.include_router(health_routes.router, prefix="/health", tags=["health"])
+
+    # Phase 2
+    app.include_router(user_routes.router, prefix="/user", tags=["user"])
+
+    # Phase 3
+    app.include_router(toggle_routes.router, prefix="/toggle", tags=["toggle"])
+
+    # Phase 4
+    app.include_router(premium_routes.router, prefix="/premium", tags=["premium"])
+
+    # Phase 5
+    app.include_router(lora_routes.router, prefix="/lora", tags=["lora"])
+    app.include_router(avatar_routes.router, prefix="/avatar", tags=["avatar"])
+    app.include_router(upload_routes.router, prefix="/upload", tags=["upload"])
+    app.include_router(media_routes.router, prefix="/media", tags=["media"])
+    app.include_router(video_routes.router, prefix="/video", tags=["video"])
+
+    # Phase 6
+    app.include_router(whisper_routes.router, prefix="/whisper", tags=["whisper"])
+
+    # Phase 7
+    app.include_router(history_routes.router, prefix="/history", tags=["history"])
+    app.include_router(metrics_routes.router, prefix="/metrics", tags=["metrics"])
+    app.include_router(analytics_routes.router, prefix="/analytics", tags=["analytics"])
+
+    # Phase 8
+    app.include_router(community_routes.router, prefix="/community", tags=["community"])
+    app.include_router(lounge_routes.router, prefix="/lounge", tags=["lounge"])
+    app.include_router(post_routes.router, prefix="/post", tags=["post"])
+    app.include_router(comment_routes.router, prefix="/comment", tags=["comment"])
+    app.include_router(reaction_routes.router, prefix="/reaction", tags=["reaction"])
+    app.include_router(invite_routes.router, prefix="/invite", tags=["invite"])
+    app.include_router(motion_routes.router, prefix="/motion", tags=["motion"])
+# Phase 9 router includes
+try:
+    from backend.routes.moderation_routes import moderation_router
+    from backend.routes.report_routes import report_router
+    app.include_router(moderation_router)
+    app.include_router(report_router)
+except Exception as _e:
+    # Safe no-op if already included or during import order issues
+    pass
+# Phase 9 router includes
+try:
+    from backend.routes.moderation_routes import moderation_router
+    from backend.routes.report_routes import report_router
+    app.include_router(moderation_router)
+    app.include_router(report_router)
+except Exception as _e:
+    # Safe no-op if already included
+    pass

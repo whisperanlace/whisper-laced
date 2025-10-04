@@ -1,0 +1,29 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+
+# Node/Front (if any)
+node_modules/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local backups / junk seen in your tree
+.cleanup_backup_*/
+backend/alembic/versions/*.bak
+requirements.txt.bak
+wl_*.txt
+env.txt
+env production.txt
+
+# Bytecode + logs
+*.log
+*.sqlite*

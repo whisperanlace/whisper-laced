@@ -1,0 +1,31 @@
+﻿from fastapi import APIRouter
+
+def include_phase9(app):
+    # existing imports…
+    from backend.controllers.moderation_controller import router as moderation_router
+    from backend.controllers.report_controller import router as report_router
+
+    # ✅ ADD THESE TWO LINES
+    from backend.controllers.auth_controller import router as auth_router
+    from backend.controllers.auth_token_controller import router as auth_token_router
+
+    # existing includes…
+    app.include_router(moderation_router)
+    app.include_router(report_router)
+
+    # ✅ ADD THESE TWO LINES
+    app.include_router(auth_router)          # /auth/me
+    app.include_router(auth_token_router)    # /auth/token
+
+    # keep the probe (optional)
+    probe = APIRouter()
+    @probe.get("/__phase9_probe")
+    def _probe():
+        return {"ok": True, "routers": [
+            "/auth/token","/auth/me",
+            "/moderation/","/reports/"
+        ]}
+    app.include_router(probe)
+
+    # force OpenAPI rebuild
+    app.openapi_schema = None

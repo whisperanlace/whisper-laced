@@ -1,0 +1,86 @@
+from backend.routes.generate_routes import router as generate_router
+from fastapi.staticfiles import StaticFiles
+from backend.config import settings
+from backend.routes import auth_routes
+import os, sys
+from pathlib import Path
+
+# Path shim
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+# Load .env
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(ROOT) / ".env")
+except Exception:
+    pass
+
+from fastapi import FastAPI
+
+# Import ALL models so Base.metadata sees tables (no forced mapper config)
+import backend.models  # dynamically imports all model modules
+
+from backend.db import Base, engine
+from backend.routes import user_routes
+from backend.routes import whisper_routes
+
+app = FastAPI(title="Laced API")
+
+
+
+app.include_router(auth_routes.router)
+from backend.app.routers_phase9 import include_phase9
+include_phase9(app)
+# Dev convenience; safe if Alembic already ran
+Base.metadata.create_all(bind=engine)
+
+# Global DEV auth bypass (only used if .env sets DEV_NO_AUTH=1)
+DEV_NO_AUTH = os.getenv("DEV_NO_AUTH", "0") == "1"
+if DEV_NO_AUTH:
+    try:
+        from backend.core import auth
+        class _DevUser: id = 1
+        app.dependency_overrides[auth.get_current_user] = lambda: _DevUser()
+        print("[DEV] Auth bypass ENABLED (get_current_user overridden)")
+    except Exception as e:
+        print("[DEV] Bypass failed:", e)
+
+# Routers
+app.include_router(user_routes.router)
+app.include_router(whisper_routes.router)
+
+@app.get("/health")
+def health():
+    return {"ok": True, "dev_no_auth": DEV_NO_AUTH}
+
+# === Phase 10 router includes (auto) ===
+try:
+    from backend.app.routers_phase10 import include_phase10
+    include_phase10(app)
+except Exception:
+    pass
+
+
+# === Phase11 middleware (idempotent manual insert) ===
+from backend.middleware.request_id import RequestIDMiddleware
+from backend.middleware.logging_mw import AccessLoggingMiddleware
+from backend.middleware.rate_limit_mw import RateLimitMiddleware
+from backend.middleware.timeout_mw import TimeoutMiddleware
+from backend.middleware.session_mw import SessionMiddlewareLite
+
+try:
+    app.add_middleware(RequestIDMiddleware)
+    app.add_middleware(AccessLoggingMiddleware)
+    app.add_middleware(RateLimitMiddleware)
+    app.add_middleware(TimeoutMiddleware)
+    app.add_middleware(SessionMiddlewareLite)
+except Exception:
+    # app may not be defined yet depending on your structure; manually place these after app = FastAPI()
+    pass
+# === end Phase11 ===
+
+app.include_router(generate_router)
+
+app.mount("/files", StaticFiles(directory=settings.OUTPUT_DIR), name="files")
