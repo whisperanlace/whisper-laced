@@ -29,6 +29,7 @@
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
-    ports: [ "5000:5000" ]
+    ports: [ "8000:8000" ]
 volumes:
   pgdata:
+

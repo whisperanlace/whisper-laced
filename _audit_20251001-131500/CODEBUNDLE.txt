@@ -2316,7 +2316,7 @@ services:
     build: .
     container_name: whisper_laced_backend
     ports:
-      - "5000:5000"
+      - "5000:8000"
     volumes:
       - ./backend:/app/backend
     environment:
@@ -5996,7 +5996,7 @@ import sys, os
 from backend.security.signer import sign
 def main(name: str, exp: int = 600):
     qs = sign(f"/files/{name}", exp)
-    base = os.getenv("PUBLIC_BASE", "http://127.0.0.1:5000")
+    base = os.getenv("PUBLIC_BASE", "http://127.0.0.1:8000")
     print(f"{base}/files/{name}?{qs}")
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -7291,7 +7291,7 @@ if __name__ == "__main__":
 import requests
 
 def test_send_prompt():
-    url = "http://localhost:5000/whisper/prompt"
+    url = "http://localhost:8000/whisper/prompt"
     payload = {"prompt": "hello whisper"}
     headers = {"Content-Type": "application/json"}
 
@@ -7390,7 +7390,7 @@ services:
       - ./scripts:/app/scripts
       - data:/data
     ports:
-      - "5000:5000"
+      - "5000:8000"
     depends_on:
       - redis
 
@@ -7603,11 +7603,11 @@ try { Set-Service memurai -StartupType Automatic | Out-Null } catch {}
 Write-Host "[OK] Memurai started (Redis @ 127.0.0.1:6379)."
 
 # --- 3) Kill anything holding port 5000 (old uvicorn) ----------------------
-$net = (netstat -ano | Select-String ":5000\s+LISTENING") | ForEach-Object {
+$net = (netstat -ano | Select-String ":8000\s+LISTENING") | ForEach-Object {
   ($_ -replace '.*\s(\d+)$','$1')
 } | Where-Object { $_ -match '^\d+$' } | Select-Object -Unique
 if ($net) {
-  Write-Host "[INFO] Killing PID(s) on :5000 -> $($net -join ', ')"
+  Write-Host "[INFO] Killing PID(s) on :8000 -> $($net -join ', ')"
   $net | ForEach-Object { try { taskkill /PID $_ /F | Out-Null } catch {} }
 }
 
@@ -7616,7 +7616,7 @@ Write-Host "[INFO] Ensuring DB schema..."
 python -m backend.scripts.init_db
 
 # --- 5) Start API (window 1) ----------------------------------------------
-Write-Host "[INFO] Starting API on http://127.0.0.1:5000 ..."
+Write-Host "[INFO] Starting API on http://127.0.0.1:8000 ..."
 Start-Process powershell -ArgumentList @(
   "-NoExit","-Command",
   "Set-Location `"$ROOT`";",
@@ -7654,7 +7654,7 @@ Start-Process powershell -ArgumentList @(
 )
 
 Write-Host "`nALL SET:"
-Write-Host " - API window: uvicorn running on :5000"
+Write-Host " - API window: uvicorn running on :8000"
 Write-Host " - Worker window: Celery connected to Redis (Memurai)"
 Write-Host " - Smoke window: Phase 10 checks"
 Write-Host " - Batch window: queued demo tasks"
@@ -7663,7 +7663,7 @@ Write-Host " - Batch window: queued demo tasks"
 
 
 ===== START FILE: scripts\smoke_phase10.ps1 =====
-param([string]$base="http://127.0.0.1:5000")
+param([string]$base="http://127.0.0.1:8000")
 
 Write-Host "Health:" (curl.exe -s "$base/health")
 Write-Host "Editor ping:" (curl.exe -s "$base/editor/ping")
@@ -7690,7 +7690,7 @@ Write-Host "Enhancements:" (curl.exe -s "$base/enhancements/")
 import requests
 
 
-BACKEND_URL = "http://localhost:5000/whisper/prompt"
+BACKEND_URL = "http://localhost:8000/whisper/prompt"
 
 
 def send_prompt_to_backend(user_id: int, prompt_text: str, response_text: str = None):
@@ -7708,3 +7708,4 @@ def send_prompt_to_backend(user_id: int, prompt_text: str, response_text: str = 
         return None
 
 ===== END FILE: whisper\services\laced_bridge.py =====
+

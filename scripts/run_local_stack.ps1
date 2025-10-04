@@ -35,11 +35,11 @@ try { Set-Service memurai -StartupType Automatic | Out-Null } catch {}
 Write-Host "[OK] Memurai started (Redis @ 127.0.0.1:6379)."
 
 # --- 3) Kill anything holding port 5000 (old uvicorn) ----------------------
-$net = (netstat -ano | Select-String ":5000\s+LISTENING") | ForEach-Object {
+$net = (netstat -ano | Select-String ":8000\s+LISTENING") | ForEach-Object {
   ($_ -replace '.*\s(\d+)$','$1')
 } | Where-Object { $_ -match '^\d+$' } | Select-Object -Unique
 if ($net) {
-  Write-Host "[INFO] Killing PID(s) on :5000 -> $($net -join ', ')"
+  Write-Host "[INFO] Killing PID(s) on :8000 -> $($net -join ', ')"
   $net | ForEach-Object { try { taskkill /PID $_ /F | Out-Null } catch {} }
 }
 
@@ -48,12 +48,12 @@ Write-Host "[INFO] Ensuring DB schema..."
 python -m backend.scripts.init_db
 
 # --- 5) Start API (window 1) ----------------------------------------------
-Write-Host "[INFO] Starting API on http://127.0.0.1:5000 ..."
+Write-Host "[INFO] Starting API on http://127.0.0.1:8000 ..."
 Start-Process powershell -ArgumentList @(
   "-NoExit","-Command",
   "Set-Location `"$ROOT`";",
   "`$env:DATABASE_URL='$env:DATABASE_URL'; `$env:SECRET_KEY='$env:SECRET_KEY';",
-  "python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 5000 --reload"
+  "python -m uvicorn backend.app.main:app --host 127.0.0.1 --port  8000 --reload"
 )
 
 # --- 6) Start Celery worker (window 2) -------------------------------------
@@ -86,7 +86,8 @@ Start-Process powershell -ArgumentList @(
 )
 
 Write-Host "`nALL SET:"
-Write-Host " - API window: uvicorn running on :5000"
+Write-Host " - API window: uvicorn running on :8000"
 Write-Host " - Worker window: Celery connected to Redis (Memurai)"
 Write-Host " - Smoke window: Phase 10 checks"
 Write-Host " - Batch window: queued demo tasks"
+

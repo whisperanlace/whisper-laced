@@ -1,7 +1,7 @@
-import requests
+﻿import requests
 
 
-BACKEND_URL = "http://localhost:5000/whisper/prompt"
+BACKEND_URL = "http://localhost:8000/whisper/prompt"
 
 
 def send_prompt_to_backend(user_id: int, prompt_text: str, response_text: str = None):
@@ -17,3 +17,4 @@ def send_prompt_to_backend(user_id: int, prompt_text: str, response_text: str = 
     except Exception as e:
         print(f"[Whisper ? Laced] Error sending prompt: {e}")
         return None
+

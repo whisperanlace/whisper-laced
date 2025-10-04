@@ -24,3 +24,4 @@ HEALTHCHECK --interval=15s --timeout=3s --retries=10 CMD curl -fsS http://127.0.
 
 # Run DB migrations then start API
 CMD ["sh","-c","alembic -c backend/alembic.ini upgrade head && exec uvicorn backend.app.main:app --host 0.0.0.0 --port 8000"]
+

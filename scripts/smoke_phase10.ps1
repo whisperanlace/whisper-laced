@@ -1,4 +1,4 @@
-﻿param([string]$base="http://127.0.0.1:5000")
+﻿param([string]$base="http://127.0.0.1:8000")
 
 Write-Host "Health:" (curl.exe -s "$base/health")
 Write-Host "Editor ping:" (curl.exe -s "$base/editor/ping")
@@ -17,3 +17,4 @@ Write-Host "Enhanced:" ($enhResp | ConvertTo-Json -Compress)
 
 Write-Host "Versions after:" (curl.exe -s "$base/editor/documents/$docId/versions")
 Write-Host "Enhancements:" (curl.exe -s "$base/enhancements/")
+
